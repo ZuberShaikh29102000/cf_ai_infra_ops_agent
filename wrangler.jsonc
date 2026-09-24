@@ -1,0 +1,34 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "cf-ai-infra-ops-agent",
+  "main": "src/server.ts",
+  "compatibility_date": "2026-06-11",
+  "compatibility_flags": ["nodejs_compat"],
+  "ai": { "binding": "AI", "remote": true },
+  "assets": {
+    "directory": "./public",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/agents/*", "/oauth/*"]
+  },
+  "durable_objects": {
+    "bindings": [
+      {
+        "class_name": "InfraAgent",
+        "name": "InfraAgent"
+      }
+    ]
+  },
+  "workflows": [
+    {
+      "name": "provision-workflow",
+      "binding": "PROVISION_WORKFLOW",
+      "class_name": "ProvisionWorkflow"
+    }
+  ],
+  "migrations": [
+    {
+      "new_sqlite_classes": ["InfraAgent"],
+      "tag": "v1"
+    }
+  ]
+}
